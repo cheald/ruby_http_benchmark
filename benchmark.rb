@@ -135,6 +135,7 @@ require_relative "./libs/httpclient.rb"
 require_relative "./libs/typhoeus.rb"
 require_relative "./libs/manticore.rb"
 require_relative "./libs/rest_client.rb"
+require_relative "./libs/excon.rb"
 
 shuffled = BaseBenchmark.children.shuffle
 BaseBenchmark::TESTS.each do |test, options|
