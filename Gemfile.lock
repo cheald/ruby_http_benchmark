@@ -1,0 +1,43 @@
+PATH
+  remote: /var/www/repos/manticore
+  specs:
+    manticore (0.1.0-java)
+      addressable (~> 2.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.3.5)
+    ethon (0.6.3)
+      ffi (>= 1.3.0)
+      mime-types (~> 1.18)
+    faraday (0.9.0)
+      multipart-post (>= 1.2, < 3)
+    ffi (1.9.3-java)
+    gnuplot (2.6.2)
+    hitimes (1.2.1-java)
+    httparty (0.13.0)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
+    httpclient (2.3.4.1)
+    json (1.8.1-java)
+    mime-types (1.25.1)
+    multi_xml (0.5.5)
+    multipart-post (2.0.0)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
+    typhoeus (0.6.7)
+      ethon (~> 0.6.2)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  faraday
+  gnuplot
+  hitimes
+  httparty
+  httpclient
+  manticore!
+  rest-client
+  typhoeus
