@@ -18,6 +18,7 @@ class BaseBenchmark
   end
 
   RUNS = {
+    warmup: 5000,
     small: 500,
     medium: 500,
     large: 500,
@@ -34,6 +35,12 @@ class BaseBenchmark
   }
 
   TESTS = {
+    warmup: {
+      name: "%sx Synchronous Uncompressed - %s",
+      runsets: {
+        small:      Array.new(1, "http://localhost/benchmark/1k.txt"),
+      }
+    },
     sync: {
       name: "%sx Synchronous Uncompressed - %s",
       runsets: {
