@@ -19,44 +19,49 @@ class BaseBenchmark
 
   RUNS = {
     small: 500,
-    medium: 250,
-    large: 100,
-    very_large: 50
+    medium: 500,
+    large: 500,
+    very_large: 100,
+    x_large: 100
   }
 
   TESTS = {
     sync: {
       runsets: {
-        small: ["http://rack.0.mshcdn.com/422.html"],
-        medium: ["http://rack.0.mshcdn.com/404.html"],
-        large: ["http://mashable.com/sitemap-posts.xml"],
-        very_large: ["http://mashable.com/sitemap-posts-2.xml"],
+        small:      Array.new(1, "http://localhost/benchmark/1k.txt"),
+        medium:     Array.new(1, "http://localhost/benchmark/10k.txt"),
+        large:      Array.new(1, "http://localhost/benchmark/100k.txt"),
+        very_large: Array.new(1, "http://localhost/benchmark/1000k.txt"),
+        x_large:    Array.new(1, "http://localhost/benchmark/10000k.txt"),
       }
     },
     gzip: {
       runsets: {
-        small: ["http://rack.0.mshcdn.com/422.html"],
-        medium: ["http://rack.0.mshcdn.com/404.html"],
-        large: ["http://mashable.com/sitemap-posts.xml"],
-        very_large: ["http://mashable.com/sitemap-posts-2.xml"],
+        small:      Array.new(1, "http://localhost/benchmark/1k.txt"),
+        medium:     Array.new(1, "http://localhost/benchmark/10k.txt"),
+        large:      Array.new(1, "http://localhost/benchmark/100k.txt"),
+        very_large: Array.new(1, "http://localhost/benchmark/1000k.txt"),
+        x_large:    Array.new(1, "http://localhost/benchmark/10000k.txt"),
       }
     },
 
     async_plain: {
       runsets: {
-        small: ["http://rack.0.mshcdn.com/422.html", "http://rack.1.mshcdn.com/422.html"],
-        medium: ["http://rack.0.mshcdn.com/404.html", "http://rack.1.mshcdn.com/404.html"],
-        large: ["http://mashable.com/sitemap-posts.xml", "http://mashable.com/sitemap-posts.xml",],
-        very_large: ["http://mashable.com/sitemap-posts-2.xml", "http://mashable.com/sitemap-posts-2.xml"],
+        small:      Array.new(8, "http://localhost/benchmark/1k.txt"),
+        medium:     Array.new(8, "http://localhost/benchmark/10k.txt"),
+        large:      Array.new(8, "http://localhost/benchmark/100k.txt"),
+        very_large: Array.new(8, "http://localhost/benchmark/1000k.txt"),
+        x_large:    Array.new(8, "http://localhost/benchmark/10000k.txt"),
       }
     },
 
     async_gzip: {
       runsets: {
-        small: ["http://rack.0.mshcdn.com/422.html", "http://rack.1.mshcdn.com/422.html"],
-        medium: ["http://rack.0.mshcdn.com/404.html", "http://rack.1.mshcdn.com/404.html"],
-        large: ["http://mashable.com/sitemap-posts.xml", "http://mashable.com/sitemap-posts.xml",],
-        very_large: ["http://mashable.com/sitemap-posts-2.xml", "http://mashable.com/sitemap-posts-2.xml"],
+        small:      Array.new(8, "http://localhost/benchmark/1k.txt"),
+        medium:     Array.new(8, "http://localhost/benchmark/10k.txt"),
+        large:      Array.new(8, "http://localhost/benchmark/100k.txt"),
+        very_large: Array.new(8, "http://localhost/benchmark/1000k.txt"),
+        x_large:    Array.new(8, "http://localhost/benchmark/10000k.txt"),
       }
     }
   }
@@ -68,9 +73,9 @@ class BaseBenchmark
     instance.send "validate_#{test}", *args if instance.respond_to? "validate_#{test}"
     instance.unsupported! unless instance.respond_to? "run_#{test}"
     blk = -> {
-      times.times {
+      times.times {|i|
         d = Hitimes::Interval.measure {
-          instance.send "run_#{test}", *args
+          instance.send "run_#{test}", *args.map.with_index {|v, x| v + "?#{i}-#{x}" }
         }
         instance.timings << d * 1000.0
       }

@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/cheald/manticore.git
-  revision: 4ce3bf5b0a1d042668efa85ebbe9e08572cbc53d
+  revision: 203c816c699b6229baf432092ca400d21d93bc40
   specs:
     manticore (0.1.0-java)
       addressable (~> 2.3)
