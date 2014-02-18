@@ -18,7 +18,15 @@ class HTTPClientBenchmark < BaseBenchmark
 
   ####################################
 
+  def setup_gzip
+    @client.transparent_gzip_decompression = true
+  end
+
   def run_gzip(url)
     @client.get(url, headers: {"accept-encoding" => "gzip"}).content
+  end
+
+  def setup_gzip
+    @client.transparent_gzip_decompression = false
   end
 end
