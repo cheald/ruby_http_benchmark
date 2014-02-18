@@ -164,13 +164,14 @@ BaseBenchmark::TESTS.each do |test, options|
           actual_index = 1
           shuffled.each.with_index do |klass, index|
             begin
+              idx = x_classes.length + 1
               shortname = klass.to_s.gsub(/Benchmark$/, "")
               block, instance = klass.prepare(test, runset, BaseBenchmark::RUNS[runset], args)
               x.report "%s: %s (%s)" % [shortname, test, runset], &block
-              plot.style "line #{index+1} lc rgb \"#{klass::COLOR}\" lw 2 pt 3"
+              plot.style "line #{idx} lc rgb \"#{klass::COLOR}\" lw 1"
               plot.data << Gnuplot::DataSet.new(instance.clean_timings) do |ds|
                 ds.title = shortname
-                ds.using = "(#{x_classes.length+1}):1 ls #{x_classes.length + 1}"
+                ds.using = "(#{idx}):1 ls #{idx}"
               end
               x_classes << shortname
               instance.teardown
