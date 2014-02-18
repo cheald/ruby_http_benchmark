@@ -113,13 +113,11 @@ class BaseBenchmark
   end
 end
 
-# Dir.glob("libs/*.rb").each {|f| require_relative f }
 require_relative "./libs/httparty.rb"
 require_relative "./libs/httpclient.rb"
 require_relative "./libs/typhoeus.rb"
 require_relative "./libs/manticore.rb"
 require_relative "./libs/rest_client.rb"
-# Typhoeus::Config.verbose = true
 
 BaseBenchmark::TESTS.each do |test, options|
   options[:runsets].each do |runset, args|
@@ -129,8 +127,6 @@ BaseBenchmark::TESTS.each do |test, options|
       Gnuplot::Plot.new( gp ) do |plot|
         plot.ylabel "ms"
         plot.xlabel "request"
-        # plot.terminal "pngcairo size 1920,1200"
-        # plot.output "out/#{filename}.png"
         plot.data = []
         plot.grid "ytics lc rgb \"#bbbbbb\" lw 1 lt 0"
         plot.grid "xtics lc rgb \"#bbbbbb\" lw 1 lt 0"
@@ -146,7 +142,7 @@ BaseBenchmark::TESTS.each do |test, options|
         shuffled = BaseBenchmark.children.shuffle
 
         shuffled.each.with_index do |klass, index|
-          plot.style "line #{index+1} lc rgb \"#{klass::COLOR}\" lw 2 pt 3" # lt 1 lw 2 pt 3"
+          plot.style "line #{index+1} lc rgb \"#{klass::COLOR}\" lw 2 pt 3"
         end
         plot.xtics "(%s) scale 0.0" % shuffled.map.with_index {|c, i| "\"#{c.to_s}\" #{i+1}" }.join(", ")
 
