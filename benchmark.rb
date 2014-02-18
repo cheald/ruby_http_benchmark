@@ -157,7 +157,7 @@ BaseBenchmark::TESTS.each do |test, options|
         plot.xtics 'nomirror'
         plot.ytics 'nomirror'
         plot.border '2'
-        plot.title options[:name] % [BaseBenchmark::RUNS[runset], RUNSET_SIZES[runset]]
+        plot.title options[:name] % [BaseBenchmark::RUNS[runset], BaseBenchmark::RUNSET_SIZES[runset]]
 
         x_classes = []
         Benchmark.bm do |x|
