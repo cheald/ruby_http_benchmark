@@ -18,10 +18,10 @@ class BaseBenchmark
   end
 
   RUNS = {
-    small: 150,
-    medium: 100,
-    large: 65,
-    very_large: 15
+    small: 500,
+    medium: 250,
+    large: 100,
+    very_large: 50
   }
 
   TESTS = {
@@ -144,29 +144,28 @@ BaseBenchmark::TESTS.each do |test, options|
         shuffled.each.with_index do |klass, index|
           plot.style "line #{index+1} lc rgb \"#{klass::COLOR}\" lw 2 pt 3"
         end
-        plot.xtics "(%s) scale 0.0" % shuffled.map.with_index {|c, i| "\"#{c.to_s}\" #{i+1}" }.join(", ")
 
+        x_classes = []
         Benchmark.bm do |x|
           benchmark_data = []
-          shuffled.each do |klass|
+          shuffled.each.with_index do |klass, index|
             begin
               block, instance = klass.prepare(test, runset, BaseBenchmark::RUNS[runset], args)
               x.report "%s: %s (%s)" % [klass.to_s, test, runset], &block
-              benchmark_data << instance.clean_timings
+              plot.data << Gnuplot::DataSet.new(instance.clean_timings) do |ds|
+                ds.title = klass.to_s.gsub(/Benchmark$/, "")
+                ds.using = "(#{index+1}):1 ls #{index + 1}"
+              end
+              x_classes << klass
               instance.teardown
               instance.next_run
             rescue UnsupportedFeatureException, FailedValidationException => e
               puts "#{klass.to_s}: #{e.message}"
             end
           end
-
-          benchmark_data.each.with_index do |data, index|
-            plot.data << Gnuplot::DataSet.new(data) do |ds|
-              ds.title = shuffled[index].to_s.gsub(/Benchmark$/, "")
-              ds.using = "(#{index+1}):1 ls #{index + 1}"
-            end
-          end
         end
+
+        plot.xtics "(%s) scale 0.0" % x_classes.map.with_index {|c, i| "\"#{c.to_s}\" #{i+1}" }.join(", ")
       end
     end
   end
