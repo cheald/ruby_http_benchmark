@@ -26,7 +26,7 @@ class HTTPClientBenchmark < BaseBenchmark
     @client.get(url, headers: {"accept-encoding" => "gzip"}).content
   end
 
-  def setup_gzip
+  def teardown_gzip
     @client.transparent_gzip_decompression = false
   end
 end
