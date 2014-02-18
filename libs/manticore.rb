@@ -1,6 +1,14 @@
 require 'manticore'
 
 class ManticoreBenchmark < BaseBenchmark
+  def setup_warmup
+    @client = Manticore::Client.new cookies: false, compression: true
+  end
+
+  def run_warmup(url)
+    @client.get(url).body
+  end
+
   COLOR = "#1E90FF"
   def setup_sync
     @client = Manticore::Client.new cookies: false, compression: false

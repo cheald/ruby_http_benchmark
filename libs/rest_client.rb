@@ -1,6 +1,10 @@
 require 'rest_client'
 class RestClientBenchmark < BaseBenchmark
   COLOR = "#E9967A"
+  def run_warmup(url)
+    RestClient.get(url).to_str
+  end
+
   def run_sync(url)
     RestClient.get(url).to_str
   end

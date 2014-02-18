@@ -5,6 +5,10 @@ class TyphoeusBenchmark < BaseBenchmark
     Typhoeus::Pool.clear
   end
 
+  def run_warmup(url)
+    Typhoeus.get(url, followlocation: true, accept_encoding: "gzip").body
+  end
+
   def run_sync(url)
     Typhoeus.get(url, followlocation: true).body
   end

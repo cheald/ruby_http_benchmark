@@ -1,7 +1,9 @@
 require 'httparty'
 class HTTPartyBenchmark < BaseBenchmark
   COLOR = "#556B2F"
-  def setup_sync
+
+  def run_warmup(url)
+    HTTParty.get(url).body
   end
 
   def run_sync(url)

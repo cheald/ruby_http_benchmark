@@ -6,6 +6,10 @@ class HTTPClientBenchmark < BaseBenchmark
     @client = HTTPClient.new
   end
 
+  def run_warmup(url)
+    @client.get(url).content
+  end
+
   def run_sync(url)
     @client.get(url).content
   end

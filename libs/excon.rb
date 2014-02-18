@@ -1,6 +1,17 @@
 require 'excon'
 class ExconBenchmark < BaseBenchmark
   COLOR = "#BB8B00"
+  def setup_warmup
+    @client = nil
+  end
+
+  def run_warmup(url)
+    @client ||= Excon.new(url, persistent: true)
+    @client.get.body
+  end
+
+  ####################################
+
   def setup_sync
     @client = nil
   end
