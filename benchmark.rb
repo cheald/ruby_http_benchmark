@@ -25,8 +25,17 @@ class BaseBenchmark
     x_large: 100
   }
 
+  RUNSET_SIZES = {
+    small: "1KB",
+    medium: "10KB",
+    large: "100KB",
+    very_large: "1MB",
+    x_large: "10MB",
+  }
+
   TESTS = {
     sync: {
+      name: "%sx Synchronous Uncompressed - %s",
       runsets: {
         small:      Array.new(1, "http://localhost/benchmark/1k.txt"),
         medium:     Array.new(1, "http://localhost/benchmark/10k.txt"),
@@ -36,6 +45,7 @@ class BaseBenchmark
       }
     },
     gzip: {
+      name: "%sx Synchronous Gzipped - %s",
       runsets: {
         small:      Array.new(1, "http://localhost/benchmark/1k.txt"),
         medium:     Array.new(1, "http://localhost/benchmark/10k.txt"),
@@ -46,6 +56,7 @@ class BaseBenchmark
     },
 
     async_plain: {
+      name: "%sx Asynchronous Uncompressed - %s",
       runsets: {
         small:      Array.new(8, "http://localhost/benchmark/1k.txt"),
         medium:     Array.new(8, "http://localhost/benchmark/10k.txt"),
@@ -56,6 +67,7 @@ class BaseBenchmark
     },
 
     async_gzip: {
+      name: "%sx Asynchronous Gzipped - %s",
       runsets: {
         small:      Array.new(8, "http://localhost/benchmark/1k.txt"),
         medium:     Array.new(8, "http://localhost/benchmark/10k.txt"),
@@ -132,7 +144,7 @@ BaseBenchmark::TESTS.each do |test, options|
     File.open( "out/#{filename}.gnuplot", "w") do |gp|
       Gnuplot::Plot.new( gp ) do |plot|
         plot.ylabel "ms"
-        plot.xlabel "request"
+        plot.xlabel "Framework"
         plot.data = []
         plot.grid "ytics lc rgb \"#bbbbbb\" lw 1 lt 0"
         plot.grid "xtics lc rgb \"#bbbbbb\" lw 1 lt 0"
@@ -145,6 +157,7 @@ BaseBenchmark::TESTS.each do |test, options|
         plot.xtics 'nomirror'
         plot.ytics 'nomirror'
         plot.border '2'
+        plot.title options[:name] % [BaseBenchmark::RUNS[runset], RUNSET_SIZES[runset]]
 
         x_classes = []
         Benchmark.bm do |x|
