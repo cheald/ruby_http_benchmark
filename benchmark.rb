@@ -17,6 +17,8 @@ class BaseBenchmark
     @children << other
   end
 
+  HOST = "localhost:8811"
+
   RUNS = {
     warmup: 5000,
     small: 500,
@@ -38,49 +40,49 @@ class BaseBenchmark
     warmup: {
       name: "%sx Synchronous Uncompressed - %s",
       runsets: {
-        small:      Array.new(1, "http://localhost/benchmark/1k.txt"),
+        small:      Array.new(1, "http://#{HOST}/1k.bin"),
       }
     },
     sync: {
       name: "%sx Synchronous Uncompressed - %s",
       runsets: {
-        small:      Array.new(1, "http://localhost/benchmark/1k.txt"),
-        medium:     Array.new(1, "http://localhost/benchmark/10k.txt"),
-        large:      Array.new(1, "http://localhost/benchmark/100k.txt"),
-        very_large: Array.new(1, "http://localhost/benchmark/1000k.txt"),
-        x_large:    Array.new(1, "http://localhost/benchmark/10000k.txt"),
+        small:      Array.new(1, "http://#{HOST}/1k.bin"),
+        medium:     Array.new(1, "http://#{HOST}/10k.bin"),
+        large:      Array.new(1, "http://#{HOST}/100k.bin"),
+        very_large: Array.new(1, "http://#{HOST}/1000k.bin"),
+        x_large:    Array.new(1, "http://#{HOST}/10000k.bin"),
       }
     },
     gzip: {
       name: "%sx Synchronous Gzipped - %s",
       runsets: {
-        small:      Array.new(1, "http://localhost/benchmark/1k.txt"),
-        medium:     Array.new(1, "http://localhost/benchmark/10k.txt"),
-        large:      Array.new(1, "http://localhost/benchmark/100k.txt"),
-        very_large: Array.new(1, "http://localhost/benchmark/1000k.txt"),
-        x_large:    Array.new(1, "http://localhost/benchmark/10000k.txt"),
+        small:      Array.new(1, "http://#{HOST}/1k.bin"),
+        medium:     Array.new(1, "http://#{HOST}/10k.bin"),
+        large:      Array.new(1, "http://#{HOST}/100k.bin"),
+        very_large: Array.new(1, "http://#{HOST}/1000k.bin"),
+        x_large:    Array.new(1, "http://#{HOST}/10000k.bin"),
       }
     },
 
     async_plain: {
       name: "%sx Asynchronous Uncompressed - %s",
       runsets: {
-        small:      Array.new(8, "http://localhost/benchmark/1k.txt"),
-        medium:     Array.new(8, "http://localhost/benchmark/10k.txt"),
-        large:      Array.new(8, "http://localhost/benchmark/100k.txt"),
-        very_large: Array.new(8, "http://localhost/benchmark/1000k.txt"),
-        x_large:    Array.new(8, "http://localhost/benchmark/10000k.txt"),
+        small:      Array.new(8, "http://#{HOST}/1k.bin"),
+        medium:     Array.new(8, "http://#{HOST}/10k.bin"),
+        large:      Array.new(8, "http://#{HOST}/100k.bin"),
+        very_large: Array.new(8, "http://#{HOST}/1000k.bin"),
+        x_large:    Array.new(8, "http://#{HOST}/10000k.bin"),
       }
     },
 
     async_gzip: {
       name: "%sx Asynchronous Gzipped - %s",
       runsets: {
-        small:      Array.new(8, "http://localhost/benchmark/1k.txt"),
-        medium:     Array.new(8, "http://localhost/benchmark/10k.txt"),
-        large:      Array.new(8, "http://localhost/benchmark/100k.txt"),
-        very_large: Array.new(8, "http://localhost/benchmark/1000k.txt"),
-        x_large:    Array.new(8, "http://localhost/benchmark/10000k.txt"),
+        small:      Array.new(8, "http://#{HOST}/1k.bin"),
+        medium:     Array.new(8, "http://#{HOST}/10k.bin"),
+        large:      Array.new(8, "http://#{HOST}/100k.bin"),
+        very_large: Array.new(8, "http://#{HOST}/1000k.bin"),
+        x_large:    Array.new(8, "http://#{HOST}/10000k.bin"),
       }
     }
   }
@@ -137,12 +139,16 @@ class BaseBenchmark
   end
 end
 
+require_relative "./libs/net_http.rb"
 require_relative "./libs/httparty.rb"
 require_relative "./libs/httpclient.rb"
 require_relative "./libs/typhoeus.rb"
-require_relative "./libs/manticore.rb"
 require_relative "./libs/rest_client.rb"
 require_relative "./libs/excon.rb"
+begin
+  require_relative "./libs/manticore.rb"
+rescue LoadError
+end
 
 shuffled = BaseBenchmark.children.shuffle
 BaseBenchmark::TESTS.each do |test, options|
