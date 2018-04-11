@@ -1,8 +1,14 @@
-task :default do
-  sh "ruby benchmark.rb"
+require 'tempfile'
+
+task :default => [:build, :start_docker, :clean, :run, :stop_docker, :plot]
+
+task :clean do
+  sh "rm -f out/*.gnuplot"
 end
 
-require 'tempfile'
+task :run do
+  sh "ruby benchmark.rb"
+end
 
 task :plot do
   sh "rm -rf plots"
@@ -26,4 +32,16 @@ task :plot do
       f.unlink
     end
   end
+end
+
+task :build do
+  sh "docker build . -t ruby-http-benchmark:latest"
+end
+
+task :start_docker do
+  sh "docker run --name ruby-http-benchmark-server -d -p 8811:80 ruby-http-benchmark:latest"
+end
+
+task :stop_docker do
+  sh "docker rm -f ruby-http-benchmark-server"
 end
