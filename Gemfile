@@ -8,3 +8,4 @@ gem "rest-client"
 gem "gnuplot"
 gem "hitimes"
 gem "excon"
+gem "curb", platforms: :ruby

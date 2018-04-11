@@ -139,15 +139,21 @@ class BaseBenchmark
   end
 end
 
-require_relative "./libs/net_http.rb"
-require_relative "./libs/httparty.rb"
-require_relative "./libs/httpclient.rb"
-require_relative "./libs/typhoeus.rb"
-require_relative "./libs/rest_client.rb"
-require_relative "./libs/excon.rb"
-begin
-  require_relative "./libs/manticore.rb"
-rescue LoadError
+libs = %w{
+  curb
+  excon
+  httparty
+  httpclient
+  manticore
+  net_http
+  rest_client
+  typhoeus
+}.each do |lib|
+  begin
+    require_relative "./libs/#{lib}"
+  rescue LoadError
+    puts "Skipping #{lib} - failed to load"
+  end
 end
 
 shuffled = BaseBenchmark.children.shuffle
